@@ -15,7 +15,7 @@ module Spree
     preference :font_size,        :integer, default: 9
     preference :store_pdf,        :boolean, default: false
     preference :storage_path,     :string,  default: 'tmp/invoice_prints'
-    preference :serial_number,     :string,  default: 'AAA'
+    preference :serie,             :string,  default: 'AAA'
     preference :num_offset,        :integer, default: 6
 
     def page_sizes
