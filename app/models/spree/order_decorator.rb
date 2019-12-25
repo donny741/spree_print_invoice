@@ -1,17 +1,21 @@
+# frozen_string_literal: true
+
 module Spree::OrderDecorator
-  has_many :bookkeeping_documents, as: :printable, dependent: :destroy
-  has_one :invoice, -> { where(template: 'invoice') },
-          class_name: 'Spree::BookkeepingDocument',
-          as: :printable
-  has_one :packaging_slip, -> { where(template: 'packaging_slip') },
-          class_name: 'Spree::BookkeepingDocument',
-          as: :printable
+  def self.prepend(base)
+    base.has_many :bookkeeping_documents, as: :printable, dependent: :destroy
+    base.has_one :invoice, -> { where(template: 'invoice') },
+                 class_name: 'Spree::BookkeepingDocument',
+                 as: :printable
+    base.has_one :packaging_slip, -> { where(template: 'packaging_slip') },
+                 class_name: 'Spree::BookkeepingDocument',
+                 as: :printable
 
-  delegate :number, :date, to: :invoice, prefix: true
+    base.delegate :number, :date, to: :invoice, prefix: true
 
-  # Create a new invoice before transitioning to complete
-  #
-  state_machine.before_transition to: :complete, do: :invoice_for_order
+    # Create a new invoice before transitioning to complete
+    #
+    base.state_machine.before_transition to: :complete, do: :invoice_for_order
+  end
 
   # Backwards compatibility stuff. Please don't use these methods, rather use the
   # ones on Spree::BookkeepingDocument
