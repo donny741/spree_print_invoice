@@ -1,4 +1,4 @@
-Spree::Order.class_eval do
+module Spree::OrderDecorator
   has_many :bookkeeping_documents, as: :printable, dependent: :destroy
   has_one :invoice, -> { where(template: 'invoice') },
           class_name: 'Spree::BookkeepingDocument',
@@ -41,3 +41,5 @@ Spree::Order.class_eval do
     bookkeeping_documents.create(template: 'packaging_slip')
   end
 end
+
+::Spree::Order.prepend(Spree::OrderDecorator)
